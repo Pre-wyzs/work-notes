@@ -34,9 +34,13 @@
 
 ![image-20220520161158377](Typora_images/workTasks/image-20220520161158377.png)
 
+##### 解决：
+
 #### part2：钉钉标题居中问题
 
 ![image-20220520161349976](Typora_images/workTasks/image-20220520161349976.png)
+
+##### 解决：
 
 #### part3：组件内容显示不出来
 
@@ -52,15 +56,96 @@
 
 
 
-- **<font color='red'>解决：组件导入的时候要进行大写。。。</font>**
+##### 解决：组件导入时大写
 
 ![image-20220520172513996](Typora_images/workTasks/image-20220520172513996.png)
 
 - **<font color='purple'>组件在封装的时候最好都先大写，符合vue2的组件开发要求。然后别忘记在pages.json中进行页面的配置，就算不进行路由也是得先配置的。</font>**
 
-- pages.json页面配置注意点：
+- **<font color='red'>pages.json页面配置注意点：</font>**
 
   ![image-20220521123253804](Typora_images/workTasks/image-20220521123253804.png)
+
+
+
+### 5、uni-app开发注意
+
+#### 5.1、根元素唯一
+
+![image-20220521144046985](Typora_images/workTasks/image-20220521144046985.png)
+
+**<font color='purple'>在\<template>模板中根元素必须唯一，虽然在公司电脑上写两个根元素没有问题？这个我也搞不清楚是什么问题，有可能是版本问题，不过为了规范性和兼容性考虑，请遵守这个准则！</font>**
+
+#### 5.2、*组件导入的坑
+
+- **组件可以按照经典的vue2.x的import模式进行导入也可以采用最新的easycome导入方式，[easycome导入](https://uniapp.dcloud.net.cn/collocation/pages.html#easycom)，注意如果按照[vue2.x组件命名标准](https://cn.vuejs.org/v2/style-guide/#%E5%9F%BA%E7%A1%80%E7%BB%84%E4%BB%B6%E5%90%8D%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90)进行导入，不然很有可能有莫名奇妙的报错的。。。**
+
+  - **<font color='purple'>建议给组件命名时，使用`xxx-xxx-...`的形式，这种形式既符合组件命名规范，又符合easycome的导入方式</font>**
+
+  如图：
+
+  ![image-20220521153020886](Typora_images/workTasks/image-20220521153020886.png)
+
+  - **<font color='red'>如果使用大写的驼峰组件命名方式，easycome就不支持了。。。如图：</font>**
+
+  ![image-20220521153428296](Typora_images/workTasks/image-20220521153428296.png)
+
+  - 然后就报错了。。。
+
+  ![image-20220521153518792](Typora_images/workTasks/image-20220521153518792.png)
+
+#### 5.3、小程序打包的坑
+
+打包错误：
+
+![image-20220521163111567](Typora_images/workTasks/image-20220521163111567.png)
+
+- **因为是文件名的关系，在小程序端进行打包，项目的文件名中不能包含-的，所以还是改成import导入吧，想想<font color='blue'>如果坚持用easycome导入，又要满足打包小程序不报错，那只能文件名和组件名相同并且小写，然后使用的时候大写，不然不可能了。</font>**
+
+#### 5.4、本地图片显示的坑
+
+**本来想在轮播图中显示图片的，然后使用img标签，不过发现在打包微信的时候图片的缩放不对，然后打包钉钉的时候发现图片显示不出来。。。没能解决这个问题；之后采用了背景图片的技术方案、用div然后样式设置如下：**
+
+```css
+.swiper-img{
+	width:100%;
+	height: 100%;
+	/* background-image: url('~@/static/img1.jpg');  */
+	/* background-repeat: no-repeat; */
+	/* background-position: center; */
+	background-size:100% 100%;  /**背景图片的大小 */
+}
+
+```
+
+![image-20220522222032378](Typora_images/workTasks/image-20220522222032378.png)
+
+- **然后dom的代码大概是这个样子的（源码删了），绑定style动态变量，然后就可以用v-for了，然后就是url这里使用es6的模板字符串，然后在打包微信的时候又出现问题了。。。就是图片的缩放不对了。然后把style中的background改成backgroundImage就正确了，我也不懂为什么，总之就是感觉很乱。然后打包钉钉还是失败了！**
+
+**<font color='purple'>方向调整：使用上面的技术方案结果小问题一大堆，不知道从何解决起，还是自己一点一点试出来的，然后就想用uni-app官网提供的cover-view参考它的写法应该不会有太多问题了吧，结果钉钉小程序还是有问题，不懂。</font>**
+
+![image-20220522223113049](Typora_images/workTasks/image-20220522223113049.png)
+
+item项：
+
+![image-20220522223138029](Typora_images/workTasks/image-20220522223138029.png)
+
+
+
+- 这样写的话在微信小程序上没有问题的，都很正常，但是钉钉就是显示不出来。。。
+
+![image-20220522223411460](Typora_images/workTasks/image-20220522223411460.png)
+
+小结：
+
+1. 使用本地图片的时候不要用相对路径和@开头的绝对路径，那个就算参照官方文档上的~@打包后还是显示不出来的。。。就是用/static的绝对路径就行了。
+2. 不考虑使用base64的编码格式，因为它太长了，打包体积都大了太多。
+3. 参考了各种的manifset中的小程序打包的设置都不能解决钉钉图片显示不出来的问题，不懂了。
+4. 解决这个问题主要以下三个方向：1cover-img标签深入，2小程序打包配置文件，3看看钉钉的官方文档怎么说的吧。
+
+
+
+
 
 
 
