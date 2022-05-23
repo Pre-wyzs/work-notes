@@ -34,7 +34,9 @@
 
 ![image-20220520161158377](Typora_images/workTasks/image-20220520161158377.png)
 
-##### 解决：
+##### 解决：https://uniapp.dcloud.net.cn/collocation/pages.html#style
+
+![image-20220523224446892](Typora_images/workTasks/image-20220523224446892.png)
 
 #### part2：钉钉标题居中问题
 
@@ -143,25 +145,35 @@ item项：
 3. 参考了各种的manifset中的小程序打包的设置都不能解决钉钉图片显示不出来的问题，不懂了。
 4. 解决这个问题主要以下三个方向：1cover-img标签深入，2小程序打包配置文件，3看看钉钉的官方文档怎么说的吧。
 
+### 6、uniapp-先后
+
+- **<font color='purple'>看了一下uni-app的视频教程，发现原来底部的tabbar可以直接通过pages.json中的文件进行配置好的，这就是一个很重要的先后顺序的问题了，就是先有pages.json中的配置文件，然后再有那些个uni-app封装好的组件的。所以先搞定配置文件然后再搞定内置组件会比较好。</font>**
+
+##### bug:【提示组件不存在】
+
+- 通过pages.json的tabbar节点配置好底部的导航栏之后，然后运行报如下的错误：
+
+![image-20220523220023034](Typora_images/workTasks/image-20220523220023034.png)
+
+**<font color='purple'>解决：之前在index.vue组件中使用了YhTabbar组件，然后删掉该组件的时候忘记把使用给删了，删除掉就好了。</font>**
 
 
 
+##### bug:【底部tabbar图片显示不出来】
+
+![image-20220523221626576](Typora_images/workTasks/image-20220523221626576.png)
 
 
 
+**<font color='purple'>解决：图片名字写错了。。。</font>**
 
 
 
+**打包编译的结果：就是tabbar能对微信小程序有又很好的适配性，但是钉钉小程序就很死相了，不仅图片显示不出来，而且底部的tabbar也是显示不出来的，给爷整🤮🤡了。**
 
 
 
-
-
-
-
-
-
-
+## 北向房销维护
 
 
 
