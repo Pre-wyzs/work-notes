@@ -175,5 +175,49 @@ item项：
 
 ## 北向房销维护
 
+### 1、prototype原型
+
+最好的教程：https://www.bilibili.com/video/BV1gE411f7Fu?p=19&spm_id_from=333.851.header_right.history_list.click
+
+- 在项目中就是使用Vue.prototype属性注册的全局getDicts方法，所以有必要去学习一下js prototype这个东西的。
+
+#### 1.1、作用
+
+功能：返回对象类型原型的引用
+
+用法：Class.prototype  //注意这里是类名，不是对象！
+
+#### 1.2、原理图
+
+![image-20220525063958369](Typora_images/workTasks/image-20220525063958369.png)
+
+- 其实就是一个道理，就是**<font color='purple'>没有的属性/方法到原型对象里面找</font>**，Person类中，如果没有age属性，你实例化一个person对象，然后用person.age是获取不到的对吧，如果你使用了Person.prototype.age = 30;相当于在Person原型对象中添加了一个age属性，值是30；这时候person对象就会根据指向原型对象的[[prototype]]指针来到原型对象中找找有没有这个属性，有了，用person.age时它的值就是30了。
+- 还有一个比较容易混淆的，person.age = 20;注意这个是一个赋值语句，就是说在**<font color='purple'>Person类中动态添加一个age的属性</font>**，值为20；同时是不会改变原型对象中的age值的。
+
+### 2、vue2.x代理配置
+
+
+
+### 3、无
+
+- 就是我发现北向房销对**<font color='purple'>请求的封装</font>**做的很好，就是一个组件对应一个js文件，这个js文件中封装好了该组件的所有请求，然后导入axios的原始封装，这种结构很好。【可以解决智慧工地中请求封装的问题】
+
+- **<font color='purple'>函数封装导出 + 添加函数到Vue原型对象</font>**；就是像函数封装好之后导出，再用import导入的封装模式是非常常用的，然后就是添加函数给原型对象，然后Vue对象就有了全局的方法，这种设计思想应该主要是用于全局对象和全局方法而言的
+
+- **<font color='purple'>快速定位目标组件</font>**：就是给你看一下跑起来的项目，快速定位到组件的位置。uniapp看pages.json，vue可以看路由。
+
+- 拉取+启动项目的基础步骤**：1、先git clone下来项目；<font color='red'>2、进入到项目目标文件夹；3、npm install 下载依赖；</font>4、然后npm run dev/serve**
+  - 这个很基础东西我还是要记录一下，这个是一切的基础，对吧，而我经常把2,3两步搞错，这就很麻烦了！以后不要记错了！
+
+**<font color='blue'>然后再研究一下项目的目录结构，看看他们是怎么安排的。</font>**
+
+
+
+
+
+
+
+
+
 
 
