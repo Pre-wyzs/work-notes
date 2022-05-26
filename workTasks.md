@@ -211,7 +211,19 @@ item项：
 
 **<font color='blue'>然后再研究一下项目的目录结构，看看他们是怎么安排的。</font>**
 
+### 4、bug【stylelint样式检查错误】
 
+就是启动的时候报错了。。。
+
+![image-20220525183237032](F:\2localRepos\work-notes\Typora_images\workTasks\image-20220525183237032.png)
+
+- 凯哥说这个是stylelint导致样式语法错误，不知道为什么。
+
+**<font color='green'>解决：这个的报错主要是因为stylelint的样式检查问题，因为我写的是rgb(21，45， 76， 70%);而rgb中是没有第四个参数的，所以就会自动转成rgb(21 45 76 /70%);的格式，然后就会报没有获取到argument $green的错误了；<font color='red'>首先得先换成rgba的然后再使用stylelint的自动修复功能取消对这一行的检查就行了。</font></font>**
+
+如图所示：
+
+![image-20220526101329982](F:\2localRepos\work-notes\Typora_images\workTasks\image-20220526101329982.png)
 
 
 
