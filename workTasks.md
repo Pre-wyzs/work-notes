@@ -244,7 +244,11 @@ item项：
 
 就是启动的时候报错了。。。
 
-![image-20220525183237032](F:\2localRepos\work-notes\Typora_images\workTasks\image-20220525183237032.png)
+![image-20220525183237032](Typora_images\workTasks\image-20220525183237032.png)
+
+
+
+
 
 - 凯哥说这个是stylelint导致样式语法错误，不知道为什么。
 
@@ -252,7 +256,7 @@ item项：
 
 如图所示：
 
-![image-20220526101329982](F:\2localRepos\work-notes\Typora_images\workTasks\image-20220526101329982.png)
+![image-20220526101329982](Typora_images\workTasks\image-20220526101329982.png)
 
 
 
