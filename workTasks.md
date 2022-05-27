@@ -262,7 +262,54 @@ item项：
 
 
 
+### 5、Typora图片路径设置
 
+![image-20220527101552711](Typora_images/workTasks/image-20220527101552711.png)
+
+
+
+## h5-housing-sales bug修复和维护
+
+
+
+## echarts高级使用
+
+### 1、颜色透明的设置方法
+
+```js
+        /** 蓝色透明圆的设置 */
+        {
+          type: 'pie',
+          selectedMode :false,
+          radius: ['50%'],
+          center: ['50%', '50%'],
+          hoverAnimation: false,
+          //*设置不响应鼠标浮动事件
+          silent: true,
+          //数据可以为空
+          data: [{name:'',value:100}],
+          label: {
+            //不要显示文本提示
+            show: false,
+          },
+          itemStyle: {
+            //@1这里为什么不显示呢？因为这个设置的意思是饼状图中的每一项进行样式设置
+            //所以如果 data: []这样写的话，那么不是一项数据都没有了吗，所以颜色设置不起作用了捏。
+            color: 'rgba(102,198,255,0.3)',
+            borderColor: '#3871FE',
+            borderWidth: 3,
+            borderType: 'dashed'
+          },
+        },
+```
+
+- **<font color='red'>看看itemStyle的color节点，就是用rgba然后再使用‘’把它变成一个字符串就行了。</font>**
+
+### 2、bug【饼状图颜色改变不了】
+
+**<font color='purple'>bug描述，就是当options.color中设置了全局的颜色之后，然后在一个pie数据对象中设置 itemStyle.color就没有用了，后来才意识到，就是itemStyle是专门为data中的每一个item项目设置的，所以如果data:[] 这样写的话，就没有item项了，所以itemStyle.color就没有用了。</font>**
+
+![image-20220527102228953](Typora_images/workTasks/image-20220527102228953.png)
 
 
 
