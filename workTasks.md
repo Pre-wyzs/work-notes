@@ -244,7 +244,7 @@ item项：
 
 就是启动的时候报错了。。。
 
-![image-20220525183237032](Typora_images\workTasks\image-20220525183237032.png)
+![image-20220525183237032](Typora_images/workTasks/image-20220525183237032.png)
 
 
 
@@ -256,7 +256,7 @@ item项：
 
 如图所示：
 
-![image-20220526101329982](Typora_images\workTasks\image-20220526101329982.png)
+![image-20220526101329982](Typora_images/workTasks/image-20220526101329982.png)
 
 
 
