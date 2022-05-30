@@ -304,6 +304,12 @@ item项：
 
 ## echarts高级使用
 
+目标样式：
+
+![image-20220530093820391](Typora_images/workTasks/image-20220530093820391.png)
+
+
+
 ### 1、颜色透明的设置方法
 
 ```js
