@@ -268,6 +268,36 @@ item项：
 
 
 
+### 6、pnpm简介
+
+- 简介：**<font color='red'>pnpm就是高性能的npm，比原先的npm和yarn具有更高的性能，并且下载的包只有一份，不会有副本，节约磁盘空间。</font>**
+
+- 参考：https://blog.csdn.net/weixin_43106777/article/details/121745882
+
+### 7、router配置
+
+#### 7.1、路径参数正则匹配
+
+路由参数匹配官方文档：https://router.vuejs.org/zh/guide/essentials/route-matching-syntax.html#%E5%9C%A8%E5%8F%82%E6%95%B0%E4%B8%AD%E8%87%AA%E5%AE%9A%E4%B9%89%E6%AD%A3%E5%88%99
+
+![image-20220529194733903](Typora_images/workTasks/image-20220529194733903.png)
+
+- **()括起来的就是配置传进来的path参数可有可无。匹配正则表达式，具体看官方文档就知道了。**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## h5-housing-sales bug修复和维护
 
 
