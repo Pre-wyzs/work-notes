@@ -300,6 +300,40 @@ item项：
 
 ## h5-housing-sales bug修复和维护
 
+### 1、bug【内容显示不全的问题】
+
+![image-20220530150720444](Typora_images/workTasks/image-20220530150720444.png)
+
+**<font color='red'>原因：因为下面的那个输入框的大小限制为最大是100了，所以会连带上面的最大输入1000失效的，我也不知道是为什么，只要把100改成1000就好了。</font>**
+
+![image-20220530151616429](Typora_images/workTasks/image-20220530151616429.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## echarts高级使用
@@ -346,6 +380,50 @@ item项：
 **<font color='purple'>bug描述，就是当options.color中设置了全局的颜色之后，然后在一个pie数据对象中设置 itemStyle.color就没有用了，后来才意识到，就是itemStyle是专门为data中的每一个item项目设置的，所以如果data:[] 这样写的话，就没有item项了，所以itemStyle.color就没有用了。</font>**
 
 ![image-20220527102228953](Typora_images/workTasks/image-20220527102228953.png)
+
+
+
+
+
+## 封装组件
+
+### 1、bug【eslint报错】
+
+![image-20220531111032499](Typora_images/workTasks/image-20220531111032499.png)
+
+
+
+- **<font color='red'>解决，你看这个地方他说是 丢失了; 说明他误以为这个是一个函数的调用了！在函数前面加一个function就行了。</font>**
+
+
+
+### 2、bug【eslint报错】
+
+![image-20220531113611044](Typora_images/workTasks/image-20220531113611044.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
