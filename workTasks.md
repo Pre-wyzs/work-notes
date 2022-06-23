@@ -420,6 +420,313 @@ item项：
 
 
 
+# 大运河H5
+
+遇事多问为什么，为什么是反者道之动的最好应用了。
+
+## 路由方面：
+
+路由的文件夹结构：
+![image-20220623095005515](Typora_images/workTasks/image-20220623095005515.png)
+
+- 在modules这个模块文件夹中，有homeTabbar.js和tabbar.js两个路由配置文件，这两个文件的写法无一例外都是这样的：写好配置数组，然后导出配置数组。
+
+![image-20220623095223736](Typora_images/workTasks/image-20220623095223736.png)
+
+
+
+这个目前不知道是干啥用的，tabbar.js下面的路由是应用页面底部的四个大的路由，homeTabbar.js就是主页面那八个选项和其子页面，不过，alleventjudgment到目前为止我没有点到它的页面里。
+
+![image-20220623100653874](Typora_images/workTasks/image-20220623100653874.png)
+
+
+
+```js
+const files = require.context('./modules', false, /\.js/);
+const routes = [];
+
+routes.push({
+  path: '/',
+  redirect: '/home'
+});
+
+files.keys().map(file => {
+  const route = files(file).default;
+  routes.push(...route);
+});
+
+// 404页面需要放到最末尾,先行注册404界面,否则无法指向404界面会报错
+const errorPage = [
+  {
+    path: '/404',
+    name: 'page404',
+    hidden: true,
+    component: () => import('@/views/404'),
+    meta: { title: '404' }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login'),
+    meta: { title: '登录', description: '登录' }
+  },
+  {
+    path: '/notLogin',
+    component: () => import('@/views/notLogin')
+  },
+  // 群众爆料的路由
+  {
+    path: '/breakNews',
+    name: 'BreakNews',
+    component: () => import('@/views/breakNews/BreakNews.vue'),
+    meta: { title: '群众爆料', description: '群众爆料' }
+  },
+  // 群众爆料的文保点选择页面
+  {
+    path: '/breakNewsWenbao',
+    name: 'BreakNewsWenbao',
+    component: () => import('@/views/breakNews/BreakNewsWenbao.vue'),
+    meta: { title: '文保点位', description: '文保点位' }
+  },
+
+  // 指向页面错误跳转到404
+  { path: '*', redirect: '/404', hidden: true }
+];
+routes.push(...errorPage);
+// 路由入口文件
+export default routes;
+```
+
+- 这个就是routes.js路由中的全部内容，
+
+这段代码是什么意思？
+
+```js
+const files = require.context('./modules', false, /\.js/);
+```
+
+
+
+**require.context(directory,useSubdirectories,regExp)**
+
+**directory:表示检索的目录**
+**useSubdirectories：表示是否检索子文件夹**
+**regExp:匹配文件的正则表达式,一般是文件名**
+**例如 require.context("@/views/components",false,/.vue$/)**
+
+**<font color='red'>所以我们知道这里的意思就是在当前的modules文件夹下匹配所有的.js文件，然后不用在子文件中检索，然后导出到files常量，我们打印一下这个files.keys()，然后就会出现下面的结果：</font>**
+
+![image-20220623103547275](Typora_images/workTasks/image-20220623103547275.png)
+
+这就说明files.key()就是文件们的路径数组。那一定会有一个疑问就是什么是files(file)呢，打印出来看看：
+
+![image-20220623104208576](Typora_images/workTasks/image-20220623104208576.png)
+
+**<font color='red'>这下就明了了，files(file).default就是当初export default Tabber的数组。为什么他要用require.context然后使用循环的方式来进行导入呢?相比于Import一次性只能导出，一个文件（当然在一个文件里可以导出很多的export ），使用require.context可以一次性导入多个文件，然后多个文件就比较好进行拆分了。</font>**
+
+
+
+
+
+## 向后台提交数据submit
+
+Promise对象：
+
+```js
+var p = new Promise((resolve, reject) => {
+    //做一些异步操作
+    setTimeout(function(){
+        console.log('执行完成');
+        resolve('随便什么数据');
+    }, 2000);
+});
+```
+
+- 回调函数中的resolve，和reject函数其实都只是设置了Promise对象的状态而已。
+
+
+
+submit函数：
+
+```js
+    // 提交
+    async handleSubmit() {
+      if (+this.checkRadio === 1) {
+        const { bumpPointId, problemRemark } = this.form;
+        const imgList = this.$refs.uploadFile.imgFileList;
+        const wentiList = this.checkQuestion;
+        if (!bumpPointId) {
+          TipsPop({
+            message: '文保点位未选择',
+            type: 'fail'
+          });
+          return;
+        }
+
+        if (!(problemRemark || wentiList.length > 0)) {
+          TipsPop({
+            message: '问题未选择或描述',
+            type: 'fail'
+          });
+          return;
+        }
+        if (imgList.length === 0) {
+          TipsPop({
+            message: '图片未上传',
+            type: 'fail'
+          });
+          return;
+        }
+      }
+      if (this.form.type === '0' && !this.form.remark) {
+        TipsPop({
+          message: '代巡检人未填',
+          type: 'fail'
+        });
+        return;
+      }
+
+      // 先判断是否有点位，再进行ToastLoading提交加载提示
+      const pos = await getLocalPosition();
+      if (!pos) {
+        return;
+      }
+
+      const { Success, Fail } = ToastLoading({
+        text: '提交中',
+        success: '新增巡检成功',
+        fail: '新增巡检失败'
+      });
+      if (this.isLoad) {
+        return;
+      }
+      this.isLoad = true;
+
+
+      const form = { ...this.form, lon: pos.longitude, lat: pos.latitude };
+      form.files = [
+        ...this.$refs.uploadFile.imgFileList,
+        ...this.$refs.uploadFile.videoFileList,
+        ...this.$refs.audioFile.audioList
+      ];
+      form.problemList = this.checkQuestion.join(';');
+      form.problemExist = this.checkRadio;
+      const fileViews = this.fileViewList.map((item, index, arr) => {
+        return {
+          fileUrl: item.fileUrl.replaceAll(process.env.VUE_APP_BASE_API, ''),
+          fileUrlOrig: item.fileUrlOrig.replaceAll(
+            process.env.VUE_APP_BASE_API,
+            ''
+          ),
+          remark: item.remark,
+          type: item.type
+        };
+      });
+      form.files = [...form.files, ...fileViews];
+
+      postPollingReport(form).then(response => {
+        console.log('提交的表单', form);
+        if (response.code === 200) {
+          setTimeout(() => {
+            Success(() => {
+              this.isLoad = false;
+              this.resetForm();
+              this.$router.go(-1);
+            });
+          }, 1000 * 1);
+        } else {
+          Fail(response.msg);
+        }
+        this.isLoad = false;
+      });
+    },
+```
+
+- 首先这个提交是一个异步函数，为的就是能获取post之后的response状态，看看是否提交成功了。
+- 然后是+this.checkRadio，这个变量前面的+是什么意思？？
+
+```js
+// null：返回 0
+console.info(+null) // => 0
+// undefined：返回 NaN
+console.info(+undefined) // => NaN
+// 获取当前的时间戳，相当于`new Date().getTime()`
+console.info(+new Date())
+// 布尔型转换为整型：true 返回 1，false 返回 0
+console.info(+true) // => 1
+console.info(+false) // => 0
+// 空字符串：返回0
+console.info(+'') // => 0
+// 忽略前面的 0
+console.info(+'010') // => 10
+// 16进制转换成 10进制
+console.info(+'0x3E8') // => 1000
+// 科学计数法自动解析
+console.info(+'1e3') // => 1000
+console.info(+'1e-3') // => 0.001
+// 无法解析的格式：返回 null
+console.info(+'1,000') // => NaN
+```
+
+可问题在于this.checkRadio是一个number类型的数据啊，this.checkRadio和+this.checkRadio都是0，这段代码没有什么太大的意义.
+
+
+
+```js
+      if (+this.checkRadio === 1) {
+        const { bumpPointId, problemRemark } = this.form;
+        const imgList = this.$refs.uploadFile.imgFileList;
+        const wentiList = this.checkQuestion;
+        if (!bumpPointId) {
+          TipsPop({
+            message: '文保点位未选择',
+            type: 'fail'
+          });
+          return;
+        }
+
+        if (!(problemRemark || wentiList.length > 0)) {
+          TipsPop({
+            message: '问题未选择或描述',
+            type: 'fail'
+          });
+          return;
+        }
+        if (imgList.length === 0) {
+          TipsPop({
+            message: '图片未上传',
+            type: 'fail'
+          });
+          return;
+        }
+      }
+```
+
+- 这段代码是校验是否巡检存在问题的，如果有问题this.checkRadio就是1。这个bumpPointId的获取是什么时候的事情呢？函数的执行时机主要有以下三个：钩子函数、事件（@click、@change、@confirm。。。）、其它函数的调用。
+
+
+
+
+
+![image-20220623164034344](Typora_images/workTasks/image-20220623164034344.png)
+
+
+
+- **<font color='#ff4000'>这个activated函数好像是，vue3 keep-alive的钩子函数，它的作用和用法我们还不得而知</font>**
+
+
+
+```js
+        if (!(problemRemark || wentiList.length > 0)) {
+          TipsPop({
+            message: '问题未选择或描述',
+            type: 'fail'
+          });
+          return;
+        }
+```
+
+- 这个判断的写法还是挺有意思的，对于两个中只要有一个就可以通过就行的 校验，!（... || ... || ...）总体取反
 
 
 
@@ -427,10 +734,72 @@ item项：
 
 
 
+ ```js
+   const { Success, Fail } = ToastLoading({
+ 
+     text: '提交中',
+ 
+     success: '新增巡检成功',
+ 
+     fail: '新增巡检失败'
+ 
+    });
+ 
+ ```
+
+- 这个是提交中的加载框框，ToastLoading的具体实现看一下：
+
+```js
+export const ToastLoading = (obj = {}) => {
+  const { text = '加载中...', success = '加载完成', fail = '加载失败' } = obj;
+  Toast.loading({
+    message: text,
+    forbidClick: true,
+    duration: 0
+  });
+  // 成功具备回调函数
+  const Success = fn => {
+    Toast.clear();
+    Toast.success({
+      message: success,
+      forbidClick: true,
+      duration: 1000,
+      onClose: () => {
+        fn && fn();
+      }
+    });
+  };
+  // 失败具备动态文本
+  const Fail = str => {
+    Toast.clear();
+    Toast.fail({
+      message: str || fail,
+      forbidClick: true
+    });
+  };
+  return {
+    Success,
+    Fail
+  };
+};
+
+```
+
+- 首先是obj = {}，这个是默认参数的用法。
+- 然后是Toast这个是vant的组件，在这里做了一层封装。
+
+- 总体来说，这个ToastLoading是一个函数，这个函数在执行的时候，就会调用Toast.loaing展示提交中的加载框框，封装Toast.success加载成功函数和Toast.fail失败函数的时候，用了两个函数，一个是Success封装函数，还有一个是Fail封装函数，这两个封装函数是提供给外部调用使用的，可见一个函数的功能可以有很多，既可以执行具体的过程，也可以定义新的封装函数并且返回给外部供外部的函数进行调用。这两个函数都先，调用clear先清除Toast.loading的窗口，然后再调用Toast.success函数和Toast.fail函数，在success函数当中，可以传递一个回调函数，就是在loading成功的时候进行一下后续的处理操作。【比如提交成功之后，进行表单的重置，然后返回到上一个提交之前的页面等等，我们可以看一下这里进行的操作。】
+
+![image-20220623182224976](Typora_images/workTasks/image-20220623182224976.png)
 
 
 
+- 这个timeout的设置的时间决定了Toast.loading框能存在多长的时间，因为，Success()函数一旦执行的话，才会把Toast.loading的窗口关闭掉的。
+- 然后就是isLoad这个校验的作用：，如图：
 
+![image-20220623183114932](Typora_images/workTasks/image-20220623183114932.png)
+
+**<font color='red'>之前我一直不明白为什么，这里需要这个isLoad的校验，这个是因为，有这样一种情况，就是在提交中的时候，加载框不是会停留1s钟吗，如果这个时候再去点击提交的话，就会再次进行提交，这个是很不好的。。。</font>**
 
 
 
