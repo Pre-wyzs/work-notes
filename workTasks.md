@@ -815,6 +815,43 @@ export const ToastLoading = (obj = {}) => {
 
 
 
+## 文保选择页面
+
+![image-20220625082422470](Typora_images/workTasks/image-20220625082422470.png)
+
+
+
+**<font color='red'>想一想这个页面有哪一些功能点，首先刚进入页面你就要从后台拿到所有的数据，然后渲染到页面上，这是其一，然后你要能通过选择区域、镇街道、片区来重新向后台发起数据请求获取到筛选过后的内容，这是其二，其三还要注意到上方输入框的搜索功能，最后还要满足只能选中一项，然后点击确认后能够返回到上一个页面。</font>**
+
+
+
+该组件的初始化代码：
+
+```js
+  created() {
+    getPointArea().then(res => {
+      this.inspectionTypeList.push(...res.data);
+    });
+
+    getPointStreet().then(res => {
+      this.distributeTypeList.push(...res.data);
+    });
+
+    getPointGrid().then(res => {
+      this.gridTypeList.push(...res.data);
+    });
+
+    this.resetScroll();
+    console.log(this.getList(1, true));
+  }
+```
+
+==上面三个部分是先获取所有的区域，街道以及片区，可以供我们选择。==
+
+
+
+
+
 
 
 
